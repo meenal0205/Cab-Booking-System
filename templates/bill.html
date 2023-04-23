@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='booking.css') }}"
+    />
+  </head>
+  <body>
+    <section class="home" id="home">
+      <div class="content">
+        <p>The Ride is confirmed</p>
+        <p>cost : {{content['cost']}}</p>
+        <p>Pick up Point :{{content['source']}}</p>
+        <p>Dropping point : {{content['destination']}}</p>
+        <p>Visit the {{content['source']}} station for picking the customer</p>
+        <a href="{{ url_for('passengerdroped', driverID=content['driverId']) }}"
+          >Reached Destination</a
+        >
+      </div>
+    </section>
+  </body>
+</html>

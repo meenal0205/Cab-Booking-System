@@ -1,0 +1,50 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='booking.css') }}"
+    />
+  </head>
+  <body>
+    
+        <header>
+            <input type="checkbox" name="" id="toggler">
+            <label for="toggler" class="fas fa-bars"></label>
+        
+            <a href="#" class="logo">cityCab<span>.</span></a>
+        
+            <nav class="navbar">
+                <a href="#home">Home</a>
+                <a href="#about">About</a>
+                <a href="cabavailable">Available Cabs</a>
+                <a href="contact.html">Contact</a>
+            </nav>
+        
+    
+        
+        </header> 
+        <form action="" method="POST">
+        <section class="home" id="home">
+           <div class="content">
+              <label for="cars">Select Source</label>
+              <select name="source" id="cars">
+              {% for i in content[0] %}
+              <option value="{{i}}">{{i}}</option>
+              {%endfor%}
+             </select>
+            <label for="cars">Select destination</label>
+            <select name="destination" id="cars">
+            {% for i in content[1] %}
+            <option value="{{i}}">{{i}}</option>
+            {%endfor%}
+            </select>
+      <button type="submit">book</button>
+    </form>
+  </body>
+</html>

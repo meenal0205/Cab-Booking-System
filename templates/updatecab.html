@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+    <title>Document</title>
+  </head>
+  <body>
+    <div class="form-container">
+      <div class="previousdetails">
+        <h4>Current Details :</h4>
+        <p><strong> Vehicle Type</strong>: {{content['details'][1]}}</p>
+        <p><strong>Car Plate Number </strong> : {{content['details'][3]}}</p>
+      </div>
+
+      <form action="" method="POST" class="updateform">
+        <h4>Updated Details</h4>
+        Vehicle Type : <input type="text" name="vehicletype" /> Car Plate Number
+        :<input type="text" name="carplatenumber" />
+        <button class="btn" type="submit">Update</button>
+      </form>
+    </div>
+  </body>
+  <script></script>
+</html>

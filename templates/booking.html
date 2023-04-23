@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='booking.css') }}"
+    />
+  </head>
+  <body>
+    <section class="home" id="home">
+      <div class="content">
+        <p>Name of driver : {{content['driver'][0]}}</p>
+        <p>Phone No : {{content['driver'][1]}}</p>
+        <p>License No : {{content['driver'][2]}}</p>
+        <p>Vehicle Type : {{content['driver'][3]}}</p>
+        <p>Car plate Number : {{content['driver'][4]}}</p>
+        <p>Cost : {{content['cost']}}</p>
+        <button onclick="handleclick()">Book Cab</button>
+        <p id="booking"></p>
+      </div>
+      <script>
+        const handleclick = (e) => {
+          document.getElementById("booking").innerHTML = "{{content['msg']}}";
+        };
+      </script>
+    </section>
+  </body>
+</html>

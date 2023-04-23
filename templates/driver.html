@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+
+    <title>Document</title>
+  </head>
+  <body>
+    <div class="form-container">
+      <form action="" method="POST">
+        <label for="drivername">Select Your id</label>
+        <input type="text" placeholder="Enter Driver Id" name="id" />
+        <label for="name">Enter Your Name</label>
+        <input type="text" placeholder="Enter Your Name" name="name" />
+        <button type="submit">submit</button>
+      </form>
+    </div>
+  </body>
+</html>
