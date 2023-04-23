@@ -84,7 +84,7 @@ def availablecabs():
 @app.route('/bookride/<driverID>', methods=['GET', 'POST'])
 def bookride(driverID):
     print(driverID)
-    cursor.execute(" select driver.driver_name , driver.mobile_no , driver.License_number,cab.vehicle_type,cab.car_plate_number from driver,cab where driver.driver_id=%s and driver.cab_id=cab.cabId;", (driverID))
+    cursor.execute(" select driver.driver_name , driver.mobile_no , driver.License_number,cab.vehicle_type,cab.car_plate_number from driver,cab where driver.driver_id=%s and driver.cab_id=cab.cabId;", (driverID,))
 
     driver = cursor.fetchone()
 
@@ -117,10 +117,13 @@ def bookride(driverID):
         date = cursor.fetchone()[0]
         cursor.execute('select curtime();')
         time = cursor.fetchone()[0]
+        cursor.execute(
+            'select * from route_details where source=%s and destination=%s', (s, d))
+        cost = cursor.fetchone()[4]
 
         print(cost)
-        cursor.execute('insert into requests (source,destination,driver_id,date,time,vehicle_type,acceptence_status) values(%s,%s,%s,%s,%s,%s,%s)',
-                       (s, d, driverID, date, time, content['driver'][3], '0'))
+        cursor.execute('insert into requests (source,destination,driver_id,date,time,vehicle_type,acceptence_status,cost) values(%s,%s,%s,%s,%s,%s,%s,%s)',
+                       (s, d, driverID, date, time, content['driver'][3], '0', cost))
         db.commit()
         return render_template('booking.html', content=content)
 
@@ -137,7 +140,7 @@ def driver():
             'SELECT * FROM driver WHERE driver_name = % s AND driver_id = % s', (name, id))
         driver = cursor.fetchone()
         if driver == None:
-            return("enter valid id and name")
+            return("enter valid id or name")
         else:
             cursor.execute('select * from requests where driver_id=%s', (id))
             a = cursor.fetchone()
@@ -202,7 +205,7 @@ def admin():
     return render_template('admin.html')
 
 
-@app.route('/driverdetails')
+@app.route('/driverDetails')
 def driverDetails():
     cursor.execute("select * from driver; ")
     drivers = cursor.fetchall()
@@ -225,8 +228,8 @@ def updateDriver(driverID):
         mobile = form['mobileno']
         location = form['location']
         print(name, license, mobile, location)
-        cursor.execute('update driver set driver_name=%s , mobile_no=%s ,  License_number=%s , location=%s',
-                       (name, mobile, license, location))
+        cursor.execute('update driver set driver_name=%s , mobile_no=%s ,  License_number=%s , location=%s where driver_id=%s',
+                       (name, mobile, license, location, driverID))
         db.commit()
         return redirect('/driverDetails')
 
@@ -254,7 +257,6 @@ def addDriver():
 def cabdetails():
     cursor.execute('select * from cab')
     cabdetails = cursor.fetchall()
-
     return render_template('cabdetails.html', content=cabdetails)
 
 
@@ -270,19 +272,70 @@ def updatecab(cabID):
         form = request.form
         vehicletype = form['vehicletype']
         car_plate_number = form['carplatenumber']
-        cursor.execute('update cab set  vehicle_type=%s, car_plate_number=%s',
-                       (vehicletype, car_plate_number))
+        cursor.execute('update cab set  vehicle_type=%s, car_plate_number=%s where cabId=%s',
+                       (vehicletype, car_plate_number, cabID))
         db.commit()
 
     return render_template('updatecab.html', content=content)
 
 
-@app.route('/addcab',methods=["POST",'GET'])
+@app.route('/addcab', methods=["POST", "GET"])
 def addcab():
-    if request.method=='POST':
-        
-    
+    if request.method == 'POST':
+        form = request.form
+        VehicleType = form['vehicletype']
+        NumberofRides = form['NumberofRides']
+        CarPlateNumber = form['CarPlateNumber']
+        AvailabilityStatus = form['AvailabilityStatus']
+
+        cursor.execute(
+            'insert into cab (vehicle_type,number_of_rides,car_plate_number,availability_status) values(%s,%s,%s,%s)', (VehicleType, NumberofRides, CarPlateNumber, AvailabilityStatus))
+        db.commit()
+        return redirect('/cabdetails')
+
     return render_template('addcab.html')
+
+
+@app.route('/deletedriver/<driverID>')
+def deletedriver(driverID):
+    cursor.execute('delete from driver where driver_id=%s', (driverID))
+    db.commit()
+    return redirect('/driverDetails')
+
+
+@app.route('/deletecab/<cabID>')
+def deletecab(cabID):
+    cursor.execute('delete from cab where cabID=%s', (cabID))
+    db.commit()
+    return redirect('/cabdetails')
+
+
+@app.route('/rideDetails')
+def rideDetails():
+    cursor.execute('select date ,sum(cost) from requests group by  date ')
+
+    costdetails = cursor.fetchone()
+
+    print(costdetails)
+    cursor.execute(
+        'select date ,count(request_id) from requests group by  date ')
+
+    total_rides = cursor.fetchone()
+
+    print(total_rides)
+
+    cursor.execute('select * from requests')
+    rides = cursor.fetchall()
+
+    content = {
+        'rides': rides,
+        'costdetails': costdetails,
+        'total_rides': total_rides
+
+    }
+    print(total_rides[0])
+
+    return render_template('rides.html', content=content)
 
 
 if __name__ == '__main__':

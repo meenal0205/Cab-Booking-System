@@ -1,0 +1,11 @@
+.container{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    
+}
+.rides{
+    padding-right:30px ;
+    
+}

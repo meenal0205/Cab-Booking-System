@@ -25,7 +25,12 @@
             <a
               href="{{ url_for('updatecab', cabID=i[0]) }}"
               class="btn btn-primary"
-              >Update Deatails</a
+              >Update Details</a
+            >
+            <a
+              href="{{ url_for('deletecab', cabID=i[0]) }}"
+              class="btn btn-danger"
+              >Delete</a
             >
           </div>
         </div>
@@ -33,6 +38,6 @@
 
       {%endfor%}
     </div>
-    <a href="/addCab" class="btn btn-primary">Add Cab</a>
+    <a href="/addcab" class="btn btn-primary">Add Cab</a>
   </body>
 </html>
